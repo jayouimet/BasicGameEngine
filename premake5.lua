@@ -13,8 +13,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
+IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 	
 include "Hazel/vendor/GLFW"
+include "Hazel/vendor/Glad"
+include "Hazel/vendor/imgui"
 	
 project "Hazel"
 	location "Hazel"
@@ -39,12 +43,16 @@ project "Hazel"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}"
 	}
 	
 	links
 	{
 		"GLFW",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 		
@@ -52,13 +60,14 @@ project "Hazel"
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 		
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_DLL"
+			"HZ_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 		
 		postbuildcommands
@@ -69,14 +78,17 @@ project "Hazel"
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
 		symbols "On"
+		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		optimize "On"
+		runtime "Release"
 		
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		optimize "On"
+		runtime "Release"
 	
 project "Sandbox"
 	location "Sandbox"
@@ -109,7 +121,6 @@ project "Sandbox"
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "On"
 		systemversion "latest"
 		
 		defines
