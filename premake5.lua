@@ -16,14 +16,17 @@ IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
 IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 	
-include "Hazel/vendor/GLFW"
-include "Hazel/vendor/Glad"
-include "Hazel/vendor/imgui"
+group "Dependencies"	
+	include "Hazel/vendor/GLFW"
+	include "Hazel/vendor/Glad"
+	include "Hazel/vendor/imgui"
+group ""
 	
 project "Hazel"
 	location "Hazel"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "Off"
  
  	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
  	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -60,7 +63,6 @@ project "Hazel"
 	
 	filter "system:windows"
 		cppdialect "C++20"
-		staticruntime "Off"
 		systemversion "latest"
 		
 		defines
@@ -72,7 +74,7 @@ project "Hazel"
 		
 		postbuildcommands
 		{
-			("{COPYDIR} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			("{copy} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 		
 	filter "configurations:Debug"
@@ -131,11 +133,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
 		symbols "On"
+		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
 		optimize "On"
+		runtime "Release"
 		
 	filter "configurations:Dist"
 		defines "HZ_DIST"
 		optimize "On"
+		runtime "Release"
