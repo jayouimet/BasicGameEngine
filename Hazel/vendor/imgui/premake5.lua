@@ -19,12 +19,13 @@ project "ImGui"
 		"imgui_demo.cpp"
 	}
 	
-	staticruntime "Off"
 	filter "system:windows"
 		systemversion "latest"
 		cppdialect "C++20"
 		runtime "Debug"
+		staticruntime "on"
 		
 	filter { "system:windows", "configurations:Release" }
 		runtime "Release"
+		staticruntime "on"
 	

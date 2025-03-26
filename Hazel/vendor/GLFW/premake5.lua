@@ -2,6 +2,7 @@ project "GLFW"
 	kind "StaticLib"
 	language "C"
 	warnings "off"
+	staticruntime "on"
      
  	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -49,9 +50,6 @@ project "GLFW"
             "_GLFW_WIN32",
             "_CRT_SECURE_NO_WARNINGS"
  		}
-
-
-	staticruntime "on"
 
 	filter "configurations:Debug"
 		runtime "Debug"

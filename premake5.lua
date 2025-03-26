@@ -25,9 +25,10 @@ group ""
 	
 project "Hazel"
 	location "Hazel"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "Off"
+	staticruntime "on"
+	cppdialect "C++20"
  
  	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
  	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -45,6 +46,11 @@ project "Hazel"
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
+	
+	defines
+ 	{
+ 		"_CRT_SECURE_NO_WARNINGS"
+ 	}
 	
 	includedirs
 	{
@@ -67,7 +73,6 @@ project "Hazel"
 	buildoptions { "/utf-8" }
 	
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 		
 		defines
@@ -77,30 +82,27 @@ project "Hazel"
 			"GLFW_INCLUDE_NONE"
 		}
 		
-		postbuildcommands
-		{
-			("{copy} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
-		}
-		
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
-		symbols "On"
+		symbols "on"
 		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
-		optimize "On"
+		optimize "on"
 		runtime "Release"
 		
 	filter "configurations:Dist"
 		defines "HZ_DIST"
-		optimize "On"
+		optimize "on"
 		runtime "Release"
 	
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++20"
+	staticruntime "on"
 	
  	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
  	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -117,6 +119,7 @@ project "Sandbox"
 	{
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src",
+		"Hazel/vendor",
 		"%{IncludeDir.glm}"
 	}
 	
@@ -128,7 +131,6 @@ project "Sandbox"
 	buildoptions { "/utf-8" }
 	
 	filter "system:windows"
-		cppdialect "C++20"
 		systemversion "latest"
 		
 		defines
@@ -138,15 +140,15 @@ project "Sandbox"
 		
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
-		symbols "On"
+		symbols "on"
 		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
-		optimize "On"
+		optimize "on"
 		runtime "Release"
 		
 	filter "configurations:Dist"
 		defines "HZ_DIST"
-		optimize "On"
+		optimize "on"
 		runtime "Release"
